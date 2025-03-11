@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectManager : MonoBehaviour
 {
+    // 각 몬스터별 프리팹
     public GameObject bossPrefab;
     public GameObject enemyAPrefab;
     public GameObject enemyBPrefab;
     public GameObject enemyCPrefab;
 
-    public GameObject coinItemPrefab;
-    public GameObject powerItemPrefab;
-    public GameObject boomItemPrefab;
+    public GameObject coinItemPrefab;       // 코인 프리팹
+    public GameObject powerItemPrefab;      // 파워 프리팹
+    public GameObject boomItemPrefab;       // 폭탄 프리팹
 
+    // 각 종류별 총알 프리팹
     public GameObject enemyBulletAPrefab;
     public GameObject enemyBulletBPrefab;
     public GameObject enemyBulletCPrefab;
@@ -21,8 +21,10 @@ public class ObjectManager : MonoBehaviour
     public GameObject playerBulletBPrefab;
     public GameObject followerBulletPrefab;
 
+    // 폭파 효과 프리팹
     public GameObject explosionPrefab;
 
+    // 미리 만들어두는 게임 오브젝트들
     private GameObject[] boss;
     private GameObject[] enemyA;
     private GameObject[] enemyB;
@@ -45,6 +47,7 @@ public class ObjectManager : MonoBehaviour
 
     private void Awake()
     {
+        // 게임 오브젝트 미리 만들어두기
         boss = new GameObject[5];
         enemyA = new GameObject[20];
         enemyB = new GameObject[20];
@@ -68,14 +71,14 @@ public class ObjectManager : MonoBehaviour
 
     private void Generate()
     {
-        // Boss Set
+        // 보스 세팅
         for (int i = 0; i < boss.Length; i++)
         {
             boss[i] = Instantiate(bossPrefab);
             boss[i].SetActive(false);
         }
 
-        // Enemy Set
+        // 몬스터 세팅
         for (int i = 0; i < enemyA.Length; i++)
         {
             enemyA[i] = Instantiate(enemyAPrefab);
@@ -94,7 +97,7 @@ public class ObjectManager : MonoBehaviour
             enemyC[i].SetActive(false);
         }
 
-        // Item Set
+        // 아이템 세팅
         for (int i = 0; i < coinItem.Length; i++)
         {
             coinItem[i] = Instantiate(coinItemPrefab);
@@ -113,7 +116,7 @@ public class ObjectManager : MonoBehaviour
             boomItem[i].SetActive(false);
         }
 
-        // Enemy Bullet Set
+        // 몬스터 총알 세팅
         for (int i = 0; i < enemyBulletA.Length; i++)
         {
             enemyBulletA[i] = Instantiate(enemyBulletAPrefab);
@@ -138,7 +141,7 @@ public class ObjectManager : MonoBehaviour
             enemyBulletD[i].SetActive(false);
         }
 
-        // Player Bullet Set
+        // 플레이어 총알 세팅
         for (int i = 0; i < playerBulletA.Length; i++)
         {
             playerBulletA[i] = Instantiate(playerBulletAPrefab);
@@ -151,14 +154,14 @@ public class ObjectManager : MonoBehaviour
             playerBulletB[i].SetActive(false);
         }
 
-        // Follower Bullet Set
+        // 팔로워 총알 세팅
         for (int i = 0; i < followerBullet.Length; i++)
         {
             followerBullet[i] = Instantiate(followerBulletPrefab);
             followerBullet[i].SetActive(false);
         }
 
-        // Explosion Effect Set
+        // 폭발 효과 세팅
         for (int i = 0; i < explosion.Length; i++)
         {
             explosion[i] = Instantiate(explosionPrefab);
@@ -166,6 +169,7 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
+    // 사용 중이지 않은 오브젝트 반환
     public GameObject MakeObj(string type)
     {
         switch (type)
@@ -229,6 +233,7 @@ public class ObjectManager : MonoBehaviour
         return null;
     }
 
+    // 오브젝트 풀 반환
     public GameObject[] GetPool(string type)
     {
         switch (type)

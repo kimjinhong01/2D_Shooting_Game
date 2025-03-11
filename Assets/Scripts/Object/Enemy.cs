@@ -11,20 +11,20 @@ public enum Spawn
 
 public class Enemy : MonoBehaviour
 {
-    public bool isBoss;
-    public string enemyName;
+    public bool isBoss;             // 보스인지
+    public string enemyName;        // 몬스터 이름
 
-    public float speed;
-    public int maxHealth;
-    public int health;
-    public Sprite[] sprites;
+    public float speed;             // 이동 속도
+    public int maxHealth;           // 최대 체력
+    public int health;              // 현재 체력
+    public Sprite[] sprites;        // 스프라이트
 
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rigid;
 
-    public string bulletObj;
-    public GameObject[] itemObj;
-    public float bulletSpeed;
+    public string bulletObj;        // 총알 이름
+    public GameObject[] itemObj;    // 드롭 아이템
+    public float bulletSpeed;       // 총알 속도
     public float coolTime;
     private float curTime;
 
@@ -241,7 +241,7 @@ public class Enemy : MonoBehaviour
             player.score += enemyScore;
             gameObject.SetActive(false);
             gameManager.CallExplosion(transform.position, enemyName);
-            transform.rotation = Quaternion.identity; // �⺻ ȸ���� 0
+            transform.rotation = Quaternion.identity; // 기본 회전값 0
         }
     }
 

@@ -434,6 +434,7 @@ public class GameManager : MonoBehaviour
         Invoke("DisableAudio", 1);
     }
 
+    // 오디오 끄기
     private void DisableAudio()
     {
         AudioManager.instance.gameObject.SetActive(false);
