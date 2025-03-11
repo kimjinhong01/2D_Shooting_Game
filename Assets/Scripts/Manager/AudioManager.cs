@@ -1,23 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// 싱글톤 패턴
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
     [Header("#BGM")]
-    public AudioClip bgmClip;
-    public float bgmVolume;
-    private AudioSource bgmPlayer;
+    public AudioClip bgmClip;           // 배경음
+    public float bgmVolume;             // 배경음 볼륨
+    private AudioSource bgmPlayer;      // 배경음 플레이어
 
     [Header("#SFX")]
-    public AudioClip[] sfxClips;
-    public float sfxVolume;
-    public int channels; // 채널 개수
-    private AudioSource[] sfxPlayers;
-    int channelIndex; // 현재 채널 번호
+    public AudioClip[] sfxClips;        // 효고음들
+    public float sfxVolume;             // 효과음 볼륨
+    public int channels;                // 채널 개수
+    private AudioSource[] sfxPlayers;   // 효과음 플레이어들
+    int channelIndex;                   // 현재 채널 번호
 
+    // 효과음 종류
     public enum Sfx
     {
         Fire,
@@ -37,7 +37,8 @@ public class AudioManager : MonoBehaviour
 
         Init();
     }
-
+    
+    // 오디오 플레이어 초기화
     private void Init()
     {
         // 배경음 플레이어 초기화
@@ -62,6 +63,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    // 배경음 재생
     public void PlayBgm(bool isPlay)
     {
         if (isPlay)
@@ -70,6 +72,7 @@ public class AudioManager : MonoBehaviour
             bgmPlayer.Stop();
     }
 
+    // 효과음 재생
     public void PlaySfx(Sfx sfx)
     {
         for (int i = 0; i < channels; i++)
@@ -86,6 +89,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    // 배경음 재생 (볼륨 조절)
     public void PlaySfx(Sfx sfx, float volume)
     {
         for (int i = 0; i < channels; i++)

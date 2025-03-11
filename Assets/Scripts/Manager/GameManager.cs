@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +6,11 @@ using System.IO;
 
 public class GameManager : MonoBehaviour
 {
-    public string[] enemies;
-    public Player player;
-    public GameObject boss;
+    public string[] enemies;        // ëª¬ìŠ¤í„° ì´ë¦„
+    public Player player;           // í”Œë ˆì´ì–´
+    public GameObject boss;         // ë³´ìŠ¤ í”„ë¦¬íŒ¹
 
-    public float realCoolTime;
+    public float realCoolTime;      // 
     private float coolTime;
     private float curTime;
     private bool isInvoke;
@@ -122,16 +121,16 @@ public class GameManager : MonoBehaviour
         spawnIndex = 0;
         spawnEnd = false;
 
-        // TextAsset : ÅØ½ºÆ® ÆÄÀÏ ¹× ¿¡¼Â Å¬·¡½º
-        // Resources.Load() : Resources Æú´õ ³» ÆÄÀÏ ºÒ·¯¿À±â
-        // as : °ËÁõÇÏ´Â Å°¿öµå
+        // TextAsset : í…ìŠ¤íŠ¸ íŒŒì¼ ë° ì—ì…‹ í´ë˜ìŠ¤
+        // Resources.Load() : Resources í´ë” ë‚´ íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸°
+        // as : ê²€ì¦í•˜ëŠ” í‚¤ì›Œë“œ
         TextAsset textFile = Resources.Load(stageName) as TextAsset;
-        // StringReader : ÆÄÀÏ ³»ÀÇ ¹®ÀÚ¿­ µ¥ÀÌÅÍ ÀĞ±â Å¬·¡½º
+        // StringReader : íŒŒì¼ ë‚´ì˜ ë¬¸ìì—´ ë°ì´í„° ì½ê¸° í´ë˜ìŠ¤
         StringReader stringReader = new StringReader(textFile.text);
 
         while (stringReader != null)
         {
-            // ReadLine() : ÅØ½ºÆ® µ¥ÀÌÅÍ¸¦ ÇÑ ÁÙ¾¿ ¹İÈ¯(ÀÚµ¿ ÁÙ¹Ù²Ş)
+            // ReadLine() : í…ìŠ¤íŠ¸ ë°ì´í„°ë¥¼ í•œ ì¤„ì”© ë°˜í™˜(ìë™ ì¤„ë°”ê¿ˆ)
             string line = stringReader.ReadLine();
 
             if (line == null)
@@ -145,7 +144,7 @@ public class GameManager : MonoBehaviour
 
         }
 
-        // StringReader·Î ¿­¾îµĞ ÆÄÀÏÀº ÀÛ¾÷ÀÌ ³¡³­ ÈÄ ²À ´İ±â
+        // StringReaderë¡œ ì—´ì–´ë‘” íŒŒì¼ì€ ì‘ì—…ì´ ëë‚œ í›„ ê¼­ ë‹«ê¸°
         stringReader.Close();
 
         coolTime = spawnList[0].coolTime;
@@ -155,8 +154,8 @@ public class GameManager : MonoBehaviour
     {
         if (gameEnd) return;
 
-        // string.Format() : ÁöÁ¤µÈ ¾ç½ÄÀ¸·Î ¹®ÀÚ¿­À» º¯È¯ÇØÁÖ´Â ÇÔ¼ö
-        // {0:n0} : ¼¼ÀÚ¸®¸¶´Ù ½°Ç¥·Î ³ª´²ÁÖ´Â ¼ıÀÚ ¾ç½Ä
+        // string.Format() : ì§€ì •ëœ ì–‘ì‹ìœ¼ë¡œ ë¬¸ìì—´ì„ ë³€í™˜í•´ì£¼ëŠ” í•¨ìˆ˜
+        // {0:n0} : ì„¸ìë¦¬ë§ˆë‹¤ ì‰¼í‘œë¡œ ë‚˜ëˆ ì£¼ëŠ” ìˆ«ì ì–‘ì‹
         scoreText.text = string.Format("{0:n0}", player.score);
         if (!player.gameObject.activeSelf && !isInvoke)
         {
