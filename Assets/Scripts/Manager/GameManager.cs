@@ -10,24 +10,30 @@ public class GameManager : MonoBehaviour
     public Player player;           // 플레이어
     public GameObject boss;         // 보스 프리팹
 
-    public float realCoolTime;      // 
+    // 시간 딜레이 변수
+    public float realCoolTime;
     private float coolTime;
     private float curTime;
     private bool isInvoke;
 
+    // 인게임 UI
     public Text scoreText;
     public Image[] lifeIcons;
     public Image[] boomIcons;
     public GameObject gameOverUI;
 
+    // 오브젝트 매니저
     public ObjectManager objectManager;
 
+    // 패턴 담을 변수
     public List<SpawnPattern> spawnList;
     public int spawnIndex;
     public bool spawnEnd;
 
+    // 스폰 위치
     public Transform[] spawnPoints;
 
+    // 스테이지 설정 변수
     private float curTime2;
     private float curTime3;
     public float stageTime;
@@ -41,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject fade;
 
+    // 게임 종료 UI
     private bool gameEnd;
     public GameObject gameClearUI;
     public Text scoreBoard;
@@ -64,6 +71,7 @@ public class GameManager : MonoBehaviour
         AudioManager.instance.PlayBgm(true);
     }
 
+    // 로딩 화면
     private void StageStart()
     {
         LoadingUI.GetComponent<Animator>().SetTrigger("OnStart");
@@ -71,6 +79,7 @@ public class GameManager : MonoBehaviour
         Invoke("GameStart", 1);
     }
 
+    // 게임 시작
     private void GameStart()
     {
         AudioManager.instance.PlaySfx(AudioManager.Sfx.GameStart);
@@ -81,6 +90,7 @@ public class GameManager : MonoBehaviour
         Invoke("activeSet", 2);
     }
 
+    // 스테이지 세팅
     private void activeSet()
     {
         LoadingUI.SetActive(false);
@@ -91,6 +101,7 @@ public class GameManager : MonoBehaviour
         fade.SetActive(false);
     }
 
+    // 스테이지 클리어
     private void StageClear()
     {
         AudioManager.instance.PlaySfx(AudioManager.Sfx.GameClear);
@@ -103,6 +114,7 @@ public class GameManager : MonoBehaviour
         Invoke("EndGame", 2);
     }
 
+    // 점수판 UI
     private void EndGame()
     {
         stageClear.SetActive(false);
@@ -115,6 +127,7 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+    // 저장 파일을 불러와 spawnList에 추가
     private void ReadSpawnFile(string stageName)
     {
         spawnList.Clear();
@@ -164,10 +177,12 @@ public class GameManager : MonoBehaviour
             Invoke("RespawnPlayer", 1);
         }
         UpdateBoomIcon(player.maxBoom, player.boom);
+        // UI 업데이트 설정
 
         if (boss != null && boss.activeSelf)
             return;
 
+        // 랜덤 스폰할지 패턴 스폰할지 결정
         curTime += Time.deltaTime;
         if (curTime >= coolTime && !spawnEnd)
         {
@@ -198,6 +213,7 @@ public class GameManager : MonoBehaviour
             curTime3 = 0;
         }
 
+        // 무적모드
         if (Input.GetKeyDown(KeyCode.X))
         {
             InvinsibleUI.SetActive(true);
@@ -212,6 +228,7 @@ public class GameManager : MonoBehaviour
         InvinsibleUI.SetActive(false);
     }
 
+    // 폭발 효과 생성
     public void CallExplosion(Vector3 pos, string type)
     {
         if (gameEnd) return;
@@ -229,6 +246,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 패턴대로 스폰
     private void SpawnPattern()
     {
         int enemyIndex = 0;
@@ -247,6 +265,7 @@ public class GameManager : MonoBehaviour
                 enemyIndex = 3;
                 break;
         }
+        // 몬스터 생성
         int enemyPoint = spawnList[spawnIndex].point - 1;
         GameObject enemyObj = objectManager.MakeObj(enemies[enemyIndex]);
         if (spawnList[spawnIndex].type == "boss")
@@ -257,6 +276,7 @@ public class GameManager : MonoBehaviour
         else
             enemyObj.transform.position = spawnPoints[enemyPoint].position;
 
+        // 몬스터 움직임
         Rigidbody2D enemyRigid = enemyObj.GetComponent<Rigidbody2D>();
         Enemy enemy = enemyObj.GetComponent<Enemy>();
         enemy.player = player;
@@ -266,6 +286,7 @@ public class GameManager : MonoBehaviour
         enemyRigid.AddForce(Vector2.down * enemy.speed, ForceMode2D.Impulse);
         enemyObj.transform.Rotate(Vector3.forward, 180);
 
+        // 옆에서 나오는 경우 움직임
         if (enemyPoint == 7 || enemyPoint == 9)
         {
             enemy.bulletDir = Spawn.Left;
@@ -279,6 +300,7 @@ public class GameManager : MonoBehaviour
             enemyRigid.AddForce(new Vector2(-enemy.speed, -1), ForceMode2D.Impulse);
         }
 
+        // 다음 스폰될 몬스터
         spawnIndex++;
         if (spawnIndex >= spawnList.Count)
         {
@@ -289,11 +311,14 @@ public class GameManager : MonoBehaviour
         coolTime = spawnList[spawnIndex].coolTime;
     }
 
+    // 랜덤으로 스폰
     private void SpawnEnemy()
     {
         int spawnIndex = Random.Range(0, 2);
+        // 랜덤한 위치에 몬스터 생성
         switch (spawnIndex)
         {
+            // 위에서 나오는 경우
             case 0:
                 float xRange = Random.Range(-player.xRange + 0.5f, player.xRange - 0.5f);
                 Vector3 spawnPos = new Vector3(xRange, 8, 0);
@@ -310,6 +335,7 @@ public class GameManager : MonoBehaviour
                 enemy.bulletDir = Spawn.Up;
                 enemyRigid.AddForce(Vector2.down * enemy.speed, ForceMode2D.Impulse);
                 break;
+            // 옆에서 나오는 경우
             case 1:
                 float yRange = Random.Range(-2f, player.yRange);
                 float ranPosX = Random.Range(0, 2) == 0 ? player.xRange + 2 : -player.xRange - 2;
@@ -340,6 +366,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 플레이어 리스폰
     private void RespawnPlayer()
     {
         if (gameEnd) return;
@@ -354,15 +381,16 @@ public class GameManager : MonoBehaviour
         player.Respawn();
     }
 
+    // 목숨 아이콘 업데이트
     private void UpdateLifeIcon(int maxHealth, int health)
     {
-        // All hide
+        // 모두 숨기기
         for (int i = 0; i < maxHealth; i++)
         {
             lifeIcons[i].color = new Color(1, 1, 1, 0);
         }
 
-        // Show
+        // 보이기
         for (int i = 0; i < health; i++)
         {
             lifeIcons[i].color = new Color(1, 1, 1, 1);
@@ -372,6 +400,7 @@ public class GameManager : MonoBehaviour
             GameOver();
     }
 
+    // 폭탄 아이콘 업데이트
     private void UpdateBoomIcon(int maxBoom, int boom)
     {
         // All hide
@@ -387,6 +416,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 게임 오버 UI
     public void GameOver()
     {
         if (gameOverUI.activeSelf)

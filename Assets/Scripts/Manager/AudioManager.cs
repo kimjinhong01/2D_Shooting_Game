@@ -1,23 +1,23 @@
 using UnityEngine;
 
-// ½Ì±ÛÅæ ÆĞÅÏ
+// ì‹±ê¸€í†¤ íŒ¨í„´
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
     [Header("#BGM")]
-    public AudioClip bgmClip;           // ¹è°æÀ½
-    public float bgmVolume;             // ¹è°æÀ½ º¼·ı
-    private AudioSource bgmPlayer;      // ¹è°æÀ½ ÇÃ·¹ÀÌ¾î
+    public AudioClip bgmClip;           // ë°°ê²½ìŒ
+    public float bgmVolume;             // ë°°ê²½ìŒ ë³¼ë¥¨
+    private AudioSource bgmPlayer;      // ë°°ê²½ìŒ í”Œë ˆì´ì–´
 
     [Header("#SFX")]
-    public AudioClip[] sfxClips;        // È¿°íÀ½µé
-    public float sfxVolume;             // È¿°úÀ½ º¼·ı
-    public int channels;                // Ã¤³Î °³¼ö
-    private AudioSource[] sfxPlayers;   // È¿°úÀ½ ÇÃ·¹ÀÌ¾îµé
-    int channelIndex;                   // ÇöÀç Ã¤³Î ¹øÈ£
+    public AudioClip[] sfxClips;        // íš¨ê³ ìŒë“¤
+    public float sfxVolume;             // íš¨ê³¼ìŒ ë³¼ë¥¨
+    public int channels;                // ì±„ë„ ê°œìˆ˜
+    private AudioSource[] sfxPlayers;   // íš¨ê³¼ìŒ í”Œë ˆì´ì–´ë“¤
+    int channelIndex;                   // í˜„ì¬ ì±„ë„ ë²ˆí˜¸
 
-    // È¿°úÀ½ Á¾·ù
+    // íš¨ê³¼ìŒ ì¢…ë¥˜
     public enum Sfx
     {
         Fire,
@@ -38,21 +38,21 @@ public class AudioManager : MonoBehaviour
         Init();
     }
     
-    // ¿Àµğ¿À ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­
+    // ì˜¤ë””ì˜¤ í”Œë ˆì´ì–´ ì´ˆê¸°í™”
     private void Init()
     {
-        // ¹è°æÀ½ ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­
+        // ë°°ê²½ìŒ í”Œë ˆì´ì–´ ì´ˆê¸°í™”
         GameObject bgmObject = new GameObject("BgmPlayer");
-        bgmObject.transform.parent = transform; // AudioManagerÀÇ ÀÚ½ÄÀ¸·Î
+        bgmObject.transform.parent = transform; // AudioManagerì˜ ìì‹ìœ¼ë¡œ
         bgmPlayer = bgmObject.AddComponent<AudioSource>();
         bgmPlayer.playOnAwake = false;
         bgmPlayer.loop = true;
         bgmPlayer.volume = bgmVolume;
         bgmPlayer.clip = bgmClip;
 
-        // È¿°úÀ½ ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­
+        // íš¨ê³¼ìŒ í”Œë ˆì´ì–´ ì´ˆê¸°í™”
         GameObject sfxObject = new GameObject("SfxPlayer");
-        sfxObject.transform.parent = transform; // AudioManagerÀÇ ÀÚ½ÄÀ¸·Î
+        sfxObject.transform.parent = transform; // AudioManagerì˜ ìì‹ìœ¼ë¡œ
         sfxPlayers = new AudioSource[channels];
 
         for(int i = 0; i < channels; i++)
@@ -63,7 +63,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // ¹è°æÀ½ Àç»ı
+    // ë°°ê²½ìŒ ì¬ìƒ
     public void PlayBgm(bool isPlay)
     {
         if (isPlay)
@@ -72,7 +72,7 @@ public class AudioManager : MonoBehaviour
             bgmPlayer.Stop();
     }
 
-    // È¿°úÀ½ Àç»ı
+    // íš¨ê³¼ìŒ ì¬ìƒ
     public void PlaySfx(Sfx sfx)
     {
         for (int i = 0; i < channels; i++)
@@ -89,7 +89,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // ¹è°æÀ½ Àç»ı (º¼·ı Á¶Àı)
+    // ë°°ê²½ìŒ ì¬ìƒ (ë³¼ë¥¨ ì¡°ì ˆ)
     public void PlaySfx(Sfx sfx, float volume)
     {
         for (int i = 0; i < channels; i++)
