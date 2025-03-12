@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// 오브젝트 풀링
 public class ObjectManager : MonoBehaviour
 {
     // 각 몬스터별 프리팹

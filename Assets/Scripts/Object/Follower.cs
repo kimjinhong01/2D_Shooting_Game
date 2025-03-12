@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ public class Follower : MonoBehaviour
     public float curTime;
     public ObjectManager objectManager;
 
-    public Vector3 followPos;
+    public Vector3 followPos;           // ë”°ë¼ê°ˆ ìœ„ì¹˜
     public int followDelay;
     public Transform parent;
     public Queue<Vector3> parentPos;
@@ -42,6 +41,7 @@ public class Follower : MonoBehaviour
         }
     }
 
+    // í™œì„±í™” ë˜ì—ˆì„ ë•Œ
     public void OnActive()
     {
         isActive = true;
@@ -49,6 +49,7 @@ public class Follower : MonoBehaviour
         Invoke("Show", 1);
     }
 
+    // ë¦¬ìŠ¤í° ë˜ì—ˆì„ ë•Œ
     void Respawn()
     {
         if (!player.activeSelf)
@@ -71,20 +72,22 @@ public class Follower : MonoBehaviour
         sprite.color = new Color(1, 1, 1, 1);
     }
 
+    // Queueë¥¼ í™œìš©í•˜ì—¬ ë”°ë¼ê°€ëŠ” ìœ„ì¹˜ë¥¼ ì„¤ì •
     private void Watch()
     {
         // Queue : FIFO (First Input First Out)
-        // Enqueue() : Å¥¿¡ µ¥ÀÌÅÍ ÀúÀåÇÏ´Â ÇÔ¼ö
+        // Enqueue() : íì— ë°ì´í„° ì €ì¥í•˜ëŠ” í•¨ìˆ˜
         parentPos.Enqueue(parent.position);
 
-        // Å¥¿¡ ÀÏÁ¤ µ¥ÀÌÅÍ °³¼ö°¡ Ã¤¿öÁö¸é ±×¶§ºÎÅÍ ¹İÈ¯
+        // íì— ì¼ì • ë°ì´í„° ê°œìˆ˜ê°€ ì±„ì›Œì§€ë©´ ê·¸ë•Œë¶€í„° ë°˜í™˜
         if (parentPos.Count > followDelay)
-            // Dequeue() : Å¥ÀÇ Ã¹ µ¥ÀÌÅÍ¸¦ »©¸é¼­ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+            // Dequeue() : íì˜ ì²« ë°ì´í„°ë¥¼ ë¹¼ë©´ì„œ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
             followPos = parentPos.Dequeue();
         else if(parentPos.Count < followDelay)
             followPos = parent.position;
     }
 
+    // ë”°ë¼ê°ˆ ìœ„ì¹˜ë¡œ ê³„ì† ë”°ë¼ê°€ê¸°
     private void Follow()
     {
         Vector3 vec = Vector3.zero;
@@ -106,6 +109,7 @@ public class Follower : MonoBehaviour
         transform.position = followPos + vec;
     }
 
+    // ì´ì•Œ ë°œì‚¬
     public void Fire()
     {
         if (!Input.GetButton("Fire1"))
@@ -114,6 +118,7 @@ public class Follower : MonoBehaviour
         if (curTime < coolTime)
             return;
 
+        // íŒŒì›Œì— ë”°ë¼ ë‹¤ë¥¸ ì´ì•Œ
         switch (power)
         {
             case 0:

@@ -282,20 +282,20 @@ public class GameManager : MonoBehaviour
         enemy.player = player;
         enemy.objectManager = objectManager;
         enemy.gameManager = this;
-        enemy.bulletDir = Spawn.Up;
+        enemy.bulletSpawn = Spawn.Up;
         enemyRigid.AddForce(Vector2.down * enemy.speed, ForceMode2D.Impulse);
         enemyObj.transform.Rotate(Vector3.forward, 180);
 
         // 옆에서 나오는 경우 움직임
         if (enemyPoint == 7 || enemyPoint == 9)
         {
-            enemy.bulletDir = Spawn.Left;
+            enemy.bulletSpawn = Spawn.Left;
             enemyObj.transform.Rotate(Vector3.forward, 270);
             enemyRigid.AddForce(new Vector2(enemy.speed, -1), ForceMode2D.Impulse);
         }
         else if(enemyPoint == 8 || enemyPoint == 10)
         {
-            enemy.bulletDir = Spawn.Right;
+            enemy.bulletSpawn = Spawn.Right;
             enemyObj.transform.Rotate(Vector3.forward, 90);
             enemyRigid.AddForce(new Vector2(-enemy.speed, -1), ForceMode2D.Impulse);
         }
@@ -332,7 +332,7 @@ public class GameManager : MonoBehaviour
                 enemy.player = player;
                 enemy.objectManager = objectManager;
                 enemy.gameManager = this;
-                enemy.bulletDir = Spawn.Up;
+                enemy.bulletSpawn = Spawn.Up;
                 enemyRigid.AddForce(Vector2.down * enemy.speed, ForceMode2D.Impulse);
                 break;
             // 옆에서 나오는 경우
@@ -352,13 +352,13 @@ public class GameManager : MonoBehaviour
                 enemy.gameManager = this;
                 if (ranPosX < 0)
                 {
-                    enemy.bulletDir = Spawn.Left;
+                    enemy.bulletSpawn = Spawn.Left;
                     enemyObj.transform.Rotate(Vector3.forward, 90);
                     enemyRigid.AddForce(new Vector2(enemy.speed, -1), ForceMode2D.Impulse);
                 }
                 else
                 {
-                    enemy.bulletDir = Spawn.Right;
+                    enemy.bulletSpawn = Spawn.Right;
                     enemyObj.transform.Rotate(Vector3.forward, 270);
                     enemyRigid.AddForce(new Vector2(-enemy.speed, -1), ForceMode2D.Impulse);
                 }

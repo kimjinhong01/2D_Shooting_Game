@@ -1,27 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     private float x;
     private float y;
-    public float speed;
+    public float speed;             // 이동 속도
     private Rigidbody2D rigid;
     private Animator anim;
-    public float xRange;
-    public float yRange;
+    public float xRange;            // 가로 제한
+    public float yRange;            // 세로 제한
 
     public GameObject bulletA;
     public GameObject bulletB;
     public float bulletSpeed;
     public float coolTime;
     private float curTime;
-    public int maxPower;
-    public int power;
-    public int maxHealth;
-    public int health;
-    public int score;
+    public int maxPower;            // 최대 파워
+    public int power;               // 현재 파워
+    public int maxHealth;           // 최대 체력
+    public int health;              // 현재 체력
+    public int score;               // 점수
 
     private SpriteRenderer sprite;
     private BoxCollider2D coll;
@@ -43,6 +41,7 @@ public class Player : MonoBehaviour
 
     public bool isInvinsible;
 
+    // 조이스틱 UI를 9개로 나누어 조작 설정
     public void joyPanel(int type)
     {
         for (int i = 0; i < 9; i++)

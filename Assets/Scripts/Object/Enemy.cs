@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum Spawn
@@ -28,7 +26,7 @@ public class Enemy : MonoBehaviour
     public float coolTime;
     private float curTime;
 
-    public Spawn bulletDir;
+    public Spawn bulletSpawn;       // 총알 생성되는 방향
     public Player player;
     public int enemyScore;
 
@@ -48,6 +46,7 @@ public class Enemy : MonoBehaviour
             animator = GetComponent<Animator>();
     }
 
+    // 활성화되면 체력 세팅
     private void OnEnable()
     {
         health = maxHealth;
@@ -79,6 +78,7 @@ public class Enemy : MonoBehaviour
         Invoke("Think", 2);
     }
 
+    // 보스 공격 패턴 결정
     private void Think()
     {
         patternIndex = patternIndex == 3 ? 0 : patternIndex + 1;
@@ -101,30 +101,36 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // 앞으로 4발을 발사
     private void FireFoward()
     {
         AudioManager.instance.PlaySfx(AudioManager.Sfx.Fire);
 
+        // 생성 위치
         Vector3 pos = transform.position + new Vector3(0.83f, -1.1f, 0);
         Vector3 pos1 = transform.position + new Vector3(0.625f, -1.1f, 0);
         Vector3 pos2 = transform.position + new Vector3(-0.83f, -1.1f, 0);
         Vector3 pos3 = transform.position + new Vector3(-0.625f, -1.1f, 0);
 
+        // 오브젝트 가져오기
         GameObject bullet = objectManager.MakeObj(bulletObj);
         GameObject bullet1 = objectManager.MakeObj(bulletObj);
         GameObject bullet2 = objectManager.MakeObj(bulletObj);
         GameObject bullet3 = objectManager.MakeObj(bulletObj);
 
+        // 위치 설정
         bullet.transform.position = pos;
         bullet1.transform.position = pos1;
         bullet2.transform.position = pos2;
         bullet3.transform.position = pos3;
 
+        // 컴포넌트 가져오기
         Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
         Rigidbody2D bulletRigid1 = bullet1.GetComponent<Rigidbody2D>();
         Rigidbody2D bulletRigid2 = bullet2.GetComponent<Rigidbody2D>();
         Rigidbody2D bulletRigid3 = bullet3.GetComponent<Rigidbody2D>();
 
+        // 총알 발사
         bulletRigid.AddForce(Vector2.down * 8, ForceMode2D.Impulse);
         bulletRigid1.AddForce(Vector2.down * 8, ForceMode2D.Impulse);
         bulletRigid2.AddForce(Vector2.down * 8, ForceMode2D.Impulse);
@@ -138,10 +144,12 @@ public class Enemy : MonoBehaviour
             Invoke("Think", 3);
     }
     
+    // 5발을 산탄으로 발사
     private void FireShot()
     {
         AudioManager.instance.PlaySfx(AudioManager.Sfx.Fire);
 
+        // 플레이어 기준으로 산탄총 발사
         int a = -2;
         for(int i = 0; i < 5; i++)
         {
@@ -162,6 +170,7 @@ public class Enemy : MonoBehaviour
             Invoke("Think", 3);
     }
 
+    // 각도에 맞춰 순차적으로 발사
     private void FireArc()
     {
         AudioManager.instance.PlaySfx(AudioManager.Sfx.Fire);
@@ -171,6 +180,7 @@ public class Enemy : MonoBehaviour
         bullet.transform.position = pos;
         bullet.transform.rotation = Quaternion.identity;
 
+        // Mathf.Cos함수로 180도 각도로 순차적으로 발사
         Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
         Vector2 bulletDir = new Vector2(Mathf.Cos(Mathf.PI * 10 * curPatternCount / maxPatternCount[patternIndex]), -1);
         bulletRigid.AddForce(bulletDir.normalized * 5, ForceMode2D.Impulse);
@@ -183,6 +193,7 @@ public class Enemy : MonoBehaviour
             Invoke("Think", 3);
     }
     
+    // 동시에 사방으로 발사
     private void FireAround()
     {
         AudioManager.instance.PlaySfx(AudioManager.Sfx.Fire);
@@ -197,6 +208,7 @@ public class Enemy : MonoBehaviour
             bullet.transform.position = transform.position;
             bullet.transform.rotation = Quaternion.identity;
 
+            // 360도 사방으로 총알 발사
             Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
             Vector2 bulletDir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / roundNum),
                                             Mathf.Sin(Mathf.PI * 2 * i / roundNum));
@@ -214,6 +226,7 @@ public class Enemy : MonoBehaviour
             Invoke("Think", 3);
     }
 
+    // 데미지 입었을 때
     public void OnHit(int dmg)
     {
         if (health <= 0)
@@ -237,6 +250,7 @@ public class Enemy : MonoBehaviour
         {
             AudioManager.instance.PlaySfx(AudioManager.Sfx.Die, 1);
 
+            // 죽으면 아이템 드랍
             ItemDrop();
             player.score += enemyScore;
             gameObject.SetActive(false);
@@ -255,6 +269,7 @@ public class Enemy : MonoBehaviour
         if (isBoss)
             return;
 
+        // 확률에 따라 아이템 드랍
         GameObject item;
         int ranIndex = Random.Range(0, 10);
         if (ranIndex < 3) // 30%
@@ -278,6 +293,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // 범위 밖으로 나가면 비활성화
         if (collision.CompareTag("Range"))
         {
             gameObject.SetActive(false);
@@ -293,6 +309,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // 일반 몬스터 공격
     public void Fire()
     {
         if (curTime < coolTime)
@@ -300,8 +317,9 @@ public class Enemy : MonoBehaviour
 
         AudioManager.instance.PlaySfx(AudioManager.Sfx.Fire);
 
-        switch (bulletDir)
+        switch (bulletSpawn)
         {
+            // 위에서 나오는 경우
             case Spawn.Up:
                 Vector3 pos = transform.position + new Vector3(0, -0.5f, 0);
                 GameObject bullet = objectManager.MakeObj(bulletObj);
@@ -311,6 +329,7 @@ public class Enemy : MonoBehaviour
                 bulletRigid.AddForce(Vector2.down * bulletSpeed, ForceMode2D.Impulse);
                 bullet.transform.Rotate(Vector3.forward, 180);
                 break;
+            // 왼쪽에서 나오는 경우
             case Spawn.Left:
                 pos = transform.position + new Vector3(0.5f, 0, 0);
                 bullet = objectManager.MakeObj(bulletObj);
@@ -320,6 +339,7 @@ public class Enemy : MonoBehaviour
                 bulletRigid.AddForce(Vector2.right * bulletSpeed, ForceMode2D.Impulse);
                 bullet.transform.Rotate(Vector3.forward, 90);
                 break;
+            // 오른쪽에서 나오는 경우
             case Spawn.Right:
                 pos = transform.position + new Vector3(-0.5f, 0, 0);
                 bullet = objectManager.MakeObj(bulletObj);
