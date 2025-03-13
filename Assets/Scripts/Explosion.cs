@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Explosion : MonoBehaviour
@@ -21,6 +19,7 @@ public class Explosion : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    // 적 비행기 종류에 따른 폭발 크기 설정
     public void StartExplosion(string target)
     {
         //anim.SetTrigger("onExplosion");

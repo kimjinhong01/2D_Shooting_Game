@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Item : MonoBehaviour
@@ -14,6 +12,7 @@ public class Item : MonoBehaviour
 
     private void OnEnable()
     {
+        // 계속 아래로 이동
         rigid.AddForce(Vector2.down, ForceMode2D.Impulse);
     }
 }

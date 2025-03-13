@@ -89,6 +89,7 @@ public class Player : MonoBehaviour
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
 
+        // 조이스틱UI 범위을 9개로 나눠서 실제 조이스틱과 같은 조작
         if (!isControl) { }
         else if (joyControl[0]) { x = -1; y = 1; }
         else if (joyControl[1]) { x = 0; y = 1; }
@@ -115,6 +116,7 @@ public class Player : MonoBehaviour
         rigid.AddForce(new Vector2(x, y) * speed);
     }
 
+    // 플레이어가 범위 바깥으로 나가지 못하게 이동 제한
     private void BlockPlayer()
     {
         if (transform.position.x > xRange)
@@ -152,6 +154,7 @@ public class Player : MonoBehaviour
 
         AudioManager.instance.PlaySfx(AudioManager.Sfx.Fire);
 
+        // 파워에 따라 다른 총알 발사
         switch (power)
         {
             case 0:
@@ -331,6 +334,7 @@ public class Player : MonoBehaviour
         if (isHit)
             return;
 
+        // EnemyBullet에 부딪히면 체력 감소
         if (collision.CompareTag("EnemyBullet"))
         {
             AudioManager.instance.PlaySfx(AudioManager.Sfx.Die, 1);
@@ -369,6 +373,7 @@ Handheld.Vibrate();
             if (collision.gameObject.GetComponent<Enemy>().enemyName == "boss")
                 collision.transform.Rotate(Vector3.forward * 180);
         }
+        // 아이템 종류에 따라 효과 적용
         else if (collision.CompareTag("Item"))
         {
             AudioManager.instance.PlaySfx(AudioManager.Sfx.Item);
@@ -400,6 +405,7 @@ Handheld.Vibrate();
         }
     }
 
+    // 보조 비행선 추가
     private void AddFollower()
     {
         if (power == 5)

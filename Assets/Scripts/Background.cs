@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Background : MonoBehaviour
@@ -14,8 +12,10 @@ public class Background : MonoBehaviour
 
     void Update()
     {
+        // 아래로 계속 이동
         transform.Translate(Vector3.down * speed * Time.deltaTime);
 
+        // viewHeight에 따라 위치 재설정
         if(transform.position.y <= -viewHeight)
             transform.position = new Vector2(0, viewHeight);
     }
